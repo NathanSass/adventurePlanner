@@ -1,5 +1,5 @@
 angular
-  .module('adventureplanner.todo')
+  .module('adventureplanner.main')
   .controller('TodoCtrl', function ($scope, $window) {
     'use strict';
     $scope.todos = JSON.parse($window.localStorage.getItem('todos') || '[]');

@@ -1,14 +1,14 @@
 
 angular.module('adventureplanner', [
   'ngRoute',
-  'adventureplanner.todo'
+  'adventureplanner.main'
 ])
 .config(function ($routeProvider) {
   'use strict';
   $routeProvider
     .when('/todo', {
       controller: 'TodoCtrl',
-      templateUrl: '/adventureplanner/todo/todo.html'
+      templateUrl: '/adventureplanner/main/todo.html'
     })
     .otherwise({
       redirectTo: '/todo'
