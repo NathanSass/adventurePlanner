@@ -6,11 +6,11 @@ angular.module('adventureplanner', [
 .config(function ($routeProvider) {
   'use strict';
   $routeProvider
-    .when('/todo', {
-      controller: 'TodoCtrl',
+    .when('/home', {
+      controller: 'MainCtrl',
       templateUrl: '/adventureplanner/main/todo.html'
     })
     .otherwise({
-      redirectTo: '/todo'
+      redirectTo: '/home'
     });
 });
