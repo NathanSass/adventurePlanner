@@ -5,12 +5,16 @@ angular.module('adventureplanner', [
 ])
 .config(function ($routeProvider) {
   'use strict';
-  $routeProvider
-    .when('/home', {
+  $routeProvider.
+    when('/home', {
+      controller: 'MainCtrl',
+      templateUrl: '/adventureplanner/main/displayPlaces.html'
+    }).
+    when('/todo', {
       controller: 'MainCtrl',
       templateUrl: '/adventureplanner/main/todo.html'
-    })
-    .otherwise({
+    }).
+    otherwise({
       redirectTo: '/home'
     });
 });
