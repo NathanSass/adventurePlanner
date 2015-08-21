@@ -1,1 +1,10 @@
-<h1> In display places </h1>
+<h2> You are in: {{currentLocation}} </h2>
+<p> It is: {{currentTemp}}  and {{currentCondition}}</p>
+<ul>
+	<li ng-repeat="place in places">
+		<h2>{{place.venue.name}}</h2>
+		<p>Dist: {{place.venue.location.distance}}</p>
+		<p>{{place.tips[0].text}}</p>
+	</li>
+
+</ul>
