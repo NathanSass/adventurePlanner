@@ -55,23 +55,28 @@ angular
       iterateOverLocations ($scope.places);
     };
 
-    var initWeatherCallback = function (data) {
-      $scope.currentCondition = data.weather[0]['description'];
-      $scope.currentTemp = data.main.temp;
-      console.log(data);
-    };
+    // var initWeatherCallback = function (data) {
+    //   $scope.currentCondition = data.weather[0]['description'];
+    //   $scope.currentTemp = data.main.temp;
+    //   console.log(data);
+    // };
 
 
      var weatherCallback = function (data, i) {
       var locationCondition = data.weather[0]['description'];
       var locationTemp = data.main.temp;
+      if (i >= 0) {
+        $scope.places[i].condition = locationCondition;
+        $scope.places[i].temp = locationTemp;
+      } else {
+        $scope.currentCondition = locationCondition;
+        $scope.currentTemp = locationTemp;
+      }
 
-      $scope.places[i].condition = locationCondition;
-      $scope.places[i].temp = locationTemp;
     };
 
     var wRequest = buildWeatherRequest(lat, longi);
-    apiCall(wRequest, initWeatherCallback);
+    apiCall(wRequest, weatherCallback);
 
     apiCall(locationRequest, locationCallback);
 
