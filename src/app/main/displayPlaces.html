@@ -1,11 +1,12 @@
 <h2> You are in: {{currentLocation}} </h2>
-<p> It is: {{currentTemp}}  and {{currentCondition}}</p>
+<p> It is: {{currentTemp | kelvinToF | number:1}} F  and {{currentCondition}}</p>
 <ul>
+	
 	<li ng-repeat="place in places">
 		<h2>{{place.venue.name}}</h2>
-		<p>Dist: {{place.venue.location.distance}}</p>
+		<p>Dist: {{place.venue.location.distance | metersToMiles | number:1}} miles</p>
 		<p>{{place.tips[0].text}}</p>
-		<p> It is: {{place.temp}} and {{place.condition}}</p>
+		<p> It is: {{place.temp | kelvinToF | number:1}} F and {{place.condition}}</p>
 	</li>
 
 </ul>

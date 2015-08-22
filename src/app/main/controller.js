@@ -8,8 +8,11 @@ angular
 
     var lat = '37.794';
     var longi = '-122.408';
-    // var latLong = '37.794,-122.408';
-    var offset = Math.floor((Math.random() * 20) + 1 );
+    
+    var randNum = function (max) {
+      return Math.floor((Math.random() * max) + 1 );
+    };
+    var offset = randNum(20);
     
     var locationRequest = 'https://api.foursquare.com/v2/venues/explore?client_id=' +
                  myId +
@@ -22,8 +25,6 @@ angular
                  '&radius=130000' +
                  '&sortByDistance=1';
 
-    // var weatherRequest = 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + longi;
-
     var buildWeatherRequest = function(lat, lng) {
       return 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lng;
     }
@@ -34,9 +35,6 @@ angular
         });
     };
 
-    // var randNum = function (max) {
-    //   return Math.floor((Math.random() * max) + 1 );
-    // };
 
     var iterateOverLocations = function (places) {
       var lat, lng;
@@ -55,14 +53,8 @@ angular
       iterateOverLocations ($scope.places);
     };
 
-    // var initWeatherCallback = function (data) {
-    //   $scope.currentCondition = data.weather[0]['description'];
-    //   $scope.currentTemp = data.main.temp;
-    //   console.log(data);
-    // };
 
-
-     var weatherCallback = function (data, i) {
+    var weatherCallback = function (data, i) {
       var locationCondition = data.weather[0]['description'];
       var locationTemp = data.main.temp;
       if (i >= 0) {
@@ -79,30 +71,5 @@ angular
     apiCall(wRequest, weatherCallback);
 
     apiCall(locationRequest, locationCallback);
-
-
-
-
-
-
-    // $scope.todos = JSON.parse($window.localStorage.getItem('todos') || '[]');
-    // $scope.$watch('todos', function (newTodos, oldTodos) {
-    //   if (newTodos !== oldTodos) {
-    //     $window.localStorage.setItem('todos', JSON.stringify(angular.copy($scope.todos)));
-    //   }
-    // }, true);
-
-    // $scope.add = function () {
-    //   var todo = {label: $scope.label, isDone: false};
-    //   $scope.todos.push(todo);
-    //   $window.localStorage.setItem('todos', JSON.stringify(angular.copy($scope.todos)));
-    //   $scope.label = '';
-    // };
-
-    // $scope.check = function () {
-    //   this.todo.isDone = !this.todo.isDone;
-    // };
-  
-
 
   });
