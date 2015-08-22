@@ -17,48 +17,63 @@ angular
                  mySecret +
                  '&v=20130815&' +
                  'll=' + lat + ',' + longi +
-                 '&query=mountain' +
-                 // '&query=sushi' +
+                 '&query=' + 'mountain' +
                  '&offset=' + offset +
-                 // '&limit=10' +
                  '&radius=130000' +
                  '&sortByDistance=1';
 
-    // var forecastKey = '4233057dd5ff3c197d4ae39ae8b05582';
-    var weatherRequest = 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + longi;
+    // var weatherRequest = 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + longi;
 
+    var buildWeatherRequest = function(lat, lng) {
+      return 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lng;
+    }
     
-    var apiCall = function (url, callback) {
+    var apiCall = function (url, callback, index) {
         $http.get(url).success(function(data) {
-          callback(data);
+          callback(data, index);
         });
     };
 
-    var randNum = function (max) {
-      return Math.floor((Math.random() * max) + 1 );
+    // var randNum = function (max) {
+    //   return Math.floor((Math.random() * max) + 1 );
+    // };
+
+    var iterateOverLocations = function (places) {
+      var lat, lng;
+      places.forEach( function (place, i) {
+        $scope.i = i;
+        lat = place.venue.location.lat;
+        lng = place.venue.location.lng;
+        var wRequest = buildWeatherRequest (lat, lng);
+        apiCall(wRequest, weatherCallback, i);
+      });
     };
 
     var locationCallback = function (data){
       $scope.currentLocation = data.response.headerFullLocation;
-      $scope.places = data.response.groups[0].items; //need venue.name 
+      $scope.places = data.response.groups[0].items; //need venue.name
+      iterateOverLocations ($scope.places);
     };
 
-    var weatherCallback = function (data) {
+    var initWeatherCallback = function (data) {
       $scope.currentCondition = data.weather[0]['description'];
       $scope.currentTemp = data.main.temp;
       console.log(data);
     };
 
-    // $http.get(weatherRequest).success(function(data) {
-    //       console.log(data);
-    // });
+
+     var weatherCallback = function (data, i) {
+      var locationCondition = data.weather[0]['description'];
+      var locationTemp = data.main.temp;
+
+      $scope.places[i].condition = locationCondition;
+      $scope.places[i].temp = locationTemp;
+    };
+
+    var wRequest = buildWeatherRequest(lat, longi);
+    apiCall(wRequest, initWeatherCallback);
 
     apiCall(locationRequest, locationCallback);
-    // console.log(weatherRequest);
-    apiCall(weatherRequest, weatherCallback);
-
-    // $http.get(locationRequest).success(function(data) {
-    // });
 
 
 
