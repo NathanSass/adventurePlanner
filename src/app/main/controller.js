@@ -2,39 +2,42 @@ angular
   .module('adventureplanner.main')
   .controller('MainCtrl', function ($scope, $window, $http) {
     'use strict';
-    
-    var myId = 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O';
-    var mySecret = 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM';
-
-    var lat = '37.794';
-    var longi = '-122.408';
-    
+        
     var randNum = function (max) {
       return Math.floor((Math.random() * max) + 1 );
     };
-    var offset = randNum(20);
     
-    var locationRequest = 'https://api.foursquare.com/v2/venues/explore?client_id=' +
-                 myId +
+    var locationRequestParams = {
+      id: 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O',
+      secret: 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM',
+      lat: '37.794',
+      lng: '-122.408',
+      offset: randNum(20),
+      query: $scope.userSearchTerm || 'mountain'
+    };
+    
+    var buildLocationRequest = function (request) {
+      return 'https://api.foursquare.com/v2/venues/explore?client_id=' +
+                 request.id +
                  '&client_secret=' +
-                 mySecret +
+                 request.secret +
                  '&v=20130815&' +
-                 'll=' + lat + ',' + longi +
-                 '&query=' + 'mountain' +
-                 '&offset=' + offset +
+                 'll=' + request.lat + ',' + request.lng +
+                 '&query=' + request.query +
+                 '&offset=' + request.offset +
                  '&radius=130000' +
                  '&sortByDistance=1';
+    };
 
     var buildWeatherRequest = function(lat, lng) {
       return 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lng;
-    }
+    };
     
     var apiCall = function (url, callback, index) {
         $http.get(url).success(function(data) {
           callback(data, index);
         });
     };
-
 
     var iterateOverLocations = function (places) {
       var lat, lng;
@@ -67,9 +70,15 @@ angular
 
     };
 
-    var wRequest = buildWeatherRequest(lat, longi);
+    $scope.triggerAdventureIdeas = function() {
+      var lRequest = buildLocationRequest(locationRequestParams);
+      console.log(lRequest);
+      apiCall(lRequest, locationCallback);
+    };
+
+    var wRequest = buildWeatherRequest(locationRequestParams.lat, locationRequestParams.lng);
     apiCall(wRequest, weatherCallback);
 
-    apiCall(locationRequest, locationCallback);
+    $scope.triggerAdventureIdeas();
 
   });
