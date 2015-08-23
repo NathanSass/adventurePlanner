@@ -13,7 +13,7 @@ angular
       lat: '37.794',
       lng: '-122.408',
       offset: randNum(20),
-      query: $scope.userSearchTerm || 'mountain'
+      query: 'mountain'
     };
     
     var buildLocationRequest = function (request) {
@@ -70,7 +70,10 @@ angular
 
     };
 
-    $scope.triggerAdventureIdeas = function() {
+    $scope.triggerAdventureIdeas = function(flag) {
+      if (flag !== 'init') {
+        locationRequestParams.query = $scope.userSearchTerm;
+      }
       var lRequest = buildLocationRequest(locationRequestParams);
       console.log(lRequest);
       apiCall(lRequest, locationCallback);
@@ -79,6 +82,6 @@ angular
     var wRequest = buildWeatherRequest(locationRequestParams.lat, locationRequestParams.lng);
     apiCall(wRequest, weatherCallback);
 
-    $scope.triggerAdventureIdeas();
+    $scope.triggerAdventureIdeas('init');
 
   });
