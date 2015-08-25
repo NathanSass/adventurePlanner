@@ -6,6 +6,7 @@ angular
     var instance = {
       getVenues: getVenues,
       venues: '',
+      currentLocation: '',
       userSearchTerm: 'mountain'
     };
 
@@ -19,7 +20,8 @@ angular
       };
       return venueService.get(params)
         .then(function (response) {
-          instance.venues = response.data.response.groups[0].items;
+					instance.currentLocation = response.data.response.headerFullLocation;
+					instance.venues = response.data.response.groups[0].items;
         });
     }
   })
