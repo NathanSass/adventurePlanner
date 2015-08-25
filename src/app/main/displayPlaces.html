@@ -1,18 +1,18 @@
 <h2> You are in: {{currentLocation}} </h2>
 <p> It's {{currentTemp | kelvinToF | number:1}} F  and {{currentCondition}}</p>
 
-<!-- <form ng-submit="triggerAdventureIdeas()" ng-controller="MainCtrl">
+<form ng-submit="service.getVenues()" ng-controller="MainCtrl">
   What are you in the mood for:
   <input type="text" ng-model="userSearchTerm" name="text" />
   <input type="submit" id="submit" value="Submit" />
-</form> -->
+</form>
 
 <ul>
 	
 	<li ng-repeat="place in service.venues">
 		<h2>{{place.venue.name}}</h2>
-		<!-- <p> {{place.venue.location.distance | metersToMiles | number:1}} miles to {{place.temp | kelvinToF | number:1}} F and {{place.condition}}</p>
-		<p>{{place.tips[0].text}}</p> -->
+		<p> {{place.venue.location.distance | metersToMiles | number:1}} miles to {{place.temp | kelvinToF | number:1}} F and {{place.condition}}</p>
+		<p>{{place.tips[0].text}}</p>
 	</li>
 
 </ul>
