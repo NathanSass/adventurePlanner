@@ -11,7 +11,7 @@
 	
 	<li ng-repeat="venue in service.venues">
 		<h2>{{venue.venue.name}}</h2>
-		<p> {{venue.venue.location.distance | metersToMiles | number:1}} miles to {{venue.temp | kelvinToF | number:1}} F and {{venue.condition}}</p>
+		<p> {{venue.venue.location.distance | metersToMiles | number:1}} miles to {{venue.weather.temp | kelvinToF | number:1}} F and {{venue.weather.condition}}</p>
 		<p>{{venue.tips[0].text}}</p>
 	</li>
 

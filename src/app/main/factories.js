@@ -2,7 +2,7 @@
 
 angular
   .module('adventureplanner.main')
-  .factory('dataService', function dataService (venueService){
+  .factory('dataService', function dataService (venueService, weatherService){
     var instance = {
       getVenues: getVenues,
       venues: '',
@@ -15,15 +15,63 @@ angular
     //////////////
     
     function getVenues () {
+      
       var params = {
         query: instance.userSearchTerm
       };
+      
       return venueService.get(params)
         .then(function (response) {
 					instance.currentLocation = response.data.response.headerFullLocation;
 					instance.venues = response.data.response.groups[0].items;
+					
+					mapWeatherWithVenue(instance.venues);
+        
         });
     }
+
+		function mapWeatherWithVenue (venues) {
+			
+			var params = { lat: '', lng: '', i: 0 };
+			
+			venues.forEach( function (place) {
+        
+        params.lat = place.venue.location.lat;
+        params.lng = place.venue.location.lng;
+
+        weatherService.get(params)
+					.then(function(response) {
+						
+						instance.venues[params.i].weather = {
+							temp: response.data.main.temp,
+							condition: response.data.weather[0].main
+						};
+						
+						params.i += 1;
+					});
+      });
+		}
+  })
+	.factory('weatherService', function weatherService ($http){
+		var service = {
+			get: get
+		};
+
+		return service;
+
+		//////////////
+
+		function get(params) {
+			return $http.get(buildWeatherRequest(params));
+		}
+
+		function buildWeatherRequest (params) {
+			if (!params) { params = {}; }
+			var lat = params.hasOwnProperty('lat') ? params.lat : '37.794';
+			var lng = params.hasOwnProperty('lng') ? params.lng : '-122.408';
+			return 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lng;
+		}
+  
   })
   .factory('venueService', function venueService ($http) {
     
@@ -71,4 +119,4 @@ angular
         query: queryVenue
       };
     }
-  })
+  });
