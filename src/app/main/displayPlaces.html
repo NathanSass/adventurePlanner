@@ -9,10 +9,10 @@
 
 <ul>
 	
-	<li ng-repeat="place in service.venues">
-		<h2>{{place.venue.name}}</h2>
-		<p> {{place.venue.location.distance | metersToMiles | number:1}} miles to {{place.temp | kelvinToF | number:1}} F and {{place.condition}}</p>
-		<p>{{place.tips[0].text}}</p>
+	<li ng-repeat="venue in service.venues">
+		<h2>{{venue.venue.name}}</h2>
+		<p> {{venue.venue.location.distance | metersToMiles | number:1}} miles to {{venue.temp | kelvinToF | number:1}} F and {{venue.condition}}</p>
+		<p>{{venue.tips[0].text}}</p>
 	</li>
 
 </ul>
