@@ -5,26 +5,31 @@ angular
   .factory('dataService', function dataService (locationService){
     var instance = {
       getVenues: getVenues,
-      venues: ''
+      venues: '',
+      userSearchTerm: 'mountain'
     };
 
     return instance;
 
     //////////////
-
+    
     function getVenues () {
-      return locationService.get()
+      var params = {
+        query: instance.userSearchTerm
+      };
+      return locationService.get(params)
         .then(function (response) {
           instance.venues = response.data.response.groups[0].items;
           return {venues: instance.venues};
           // console.log(response.data.response);
-        })
+        });
     }
   })
   .factory('locationService', function locationService ($http) {
     
     var service = {
       get: get,
+      locationParams: locationParams,
       testHttp: function(){ console.log('http Service Working');}
     };
     
@@ -33,8 +38,8 @@ angular
     //////////////
     
 
-    function get() {
-      var venueUrl = _buildLocationRequest (locationParams());
+    function get(params) {
+      var venueUrl = _buildLocationRequest (locationParams(params));
       return $http.get(venueUrl);
     }
 
@@ -51,7 +56,7 @@ angular
                  '&sortByDistance=1';
     }
 
-    function locationParams (params ) {
+    function locationParams ( params ) {
       if (!params) {params = {};}
       var max = params.hasOwnProperty('max') ? params.max : 20;
       var queryVenue = params.hasOwnProperty('query') ? params.query : 'mountain';
