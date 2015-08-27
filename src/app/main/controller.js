@@ -4,5 +4,4 @@ angular
   .module('adventureplanner.main')
   .controller('MainCtrl', function ($scope, $window, dataService) {
     $scope.service = dataService;
-    $scope.service.getVenues();
   });
