@@ -24,10 +24,6 @@ angular.module('adventureplanner', [
         getVenuesAndWeather: getVenuesAndWeather
       }
     }).
-    when('/todo', {
-      controller: 'MainCtrl',
-      templateUrl: '/adventureplanner/main/todo.html'
-    }).
     otherwise({
       redirectTo: '/home'
     });
