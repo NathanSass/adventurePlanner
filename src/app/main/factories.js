@@ -7,7 +7,9 @@ angular
       getVenues: getVenues,
       venues: '',
       currentLocation: '',
-      userSearchTerm: 'mountain'
+      userSearchTerm: 'mountain',
+      lat: '39.0349',
+      lng: '-77.1014'
     };
 
     return instance;
@@ -17,7 +19,9 @@ angular
     function getVenues () {
       
       var params = {
-        query: instance.userSearchTerm
+        query: instance.userSearchTerm,
+        // lat: instance.lat, //uncomment to use custom for network calls
+        // lng: instance.lng
       };
       
       return venueService.get(params)
@@ -104,8 +108,10 @@ angular
 
     function venueParams ( params ) {
       if (!params) {params = {};}
-      var max = params.hasOwnProperty('max') ? params.max : 20;
+      var max        = params.hasOwnProperty('max')   ? params.max   : 20;
       var queryVenue = params.hasOwnProperty('query') ? params.query : 'mountain';
+      var lat        = params.hasOwnProperty('lat')   ? params.lat   : '37.7974';
+      var lng        = params.hasOwnProperty('lng')   ? params.lng   : '-122.4160';
       
       function _randNum () {
         return Math.floor((Math.random() * max) + 1 );
@@ -113,8 +119,8 @@ angular
       return {
         id: 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O',
         secret: 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM',
-        lat: '37.794',
-        lng: '-122.408',
+        lat: lat,
+        lng: lng,
         offset: _randNum(20),
         query: queryVenue
       };
