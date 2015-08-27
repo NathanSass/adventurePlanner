@@ -12,7 +12,6 @@ angular.module('adventureplanner', [
 })
 .filter('metersToMiles', function() {
   return function(meters) {
-
     return meters / 1609.344;
   };
 })
