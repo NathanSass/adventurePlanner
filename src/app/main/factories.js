@@ -2,11 +2,13 @@
 
 angular
   .module('adventureplanner.main')
-  .factory('dataService', function dataService (venueService, weatherService){
+  .factory('dataService', function dataService ( venueService, weatherService, nearCityService) {
     var instance = {
       getVenues: getVenues,
+      queryOtherCities: queryOtherCities,
       venues: '',
       currentLocation: '',
+      citySearchRadius: 60,
       userSearchTerm: 'mountain',
       lat: '39.0349',
       lng: '-77.1014'
@@ -15,14 +17,26 @@ angular
     return instance;
 
     //////////////
+
+    function queryOtherCities () {
+      var params = {
+        citySearchRadius: instance.citySearchRadius,
+        lat: instance.lat,
+        lng: instance.lng
+      };
+      console.log('boo');
+      nearCityService.get(params);
+    }
     
     function getVenues () {
       
       var params = {
         query: instance.userSearchTerm,
-        // lat: instance.lat, //uncomment to use custom for network calls
+        // lat: instance.lat, //uncomment to use custom for network calls 
         // lng: instance.lng
       };
+
+      instance.queryOtherCities();
       
       return venueService.get(params)
         .then(function (response) {
@@ -56,7 +70,7 @@ angular
       });
 		}
   })
-	.factory('weatherService', function weatherService ($http){
+	.factory('weatherService', function weatherService ( $http ) {
 		var service = {
 			get: get
 		};
@@ -107,7 +121,7 @@ angular
     }
 
     function venueParams ( params ) {
-      if (!params) {params = {};}
+      if (!params) { params = {}; }
       var max        = params.hasOwnProperty('max')   ? params.max   : 20;
       var queryVenue = params.hasOwnProperty('query') ? params.query : 'mountain';
       var lat        = params.hasOwnProperty('lat')   ? params.lat   : '37.7974';
@@ -125,4 +139,37 @@ angular
         query: queryVenue
       };
     }
+  })
+  .factory('nearCityService', function nearCityService ($http) {
+    
+    var service = {
+      get: get,
+      // findBoundaries: findBoundaries,
+      buildRequest: buildRequest
+    };
+    
+    return service;
+    
+    //////////////
+    
+    function get ( params ) {
+      // Todo take in paramas latLng then calculate bounding box and pass it to buildRequest
+      return $http.get(buildRequest());
+    }
+
+    // function findBoundaries (params) {
+
+
+
+    // }
+
+    function buildRequest () {
+      var north = '38.2';
+      var south = '36.3';
+      var east = '-121';
+      var west = '-123';
+
+      return 'http://api.geonames.org/citiesJSON?north='+ north + '&south=' + south +'&east=' + east + '&west=' + west + '&lang=de&username=sturpon711';
+    }
+
   });
