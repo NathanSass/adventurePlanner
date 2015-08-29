@@ -11,7 +11,8 @@ angular
       citySearchRadius: 60,
       userSearchTerm: 'mountain',
       lat: '39.0349',
-      lng: '-77.1014'
+      lng: '-122.408'
+      // lng: '-77.1014'
     };
 
     return instance;
@@ -40,7 +41,7 @@ angular
       return venueService.get(params)
         .then(function (response) {
 					instance.currentLocation = response.data.response.headerFullLocation;
-					instance.venues = response.data.response.groups[0].items;
+					instance.venues          = response.data.response.groups[0].items;
 					
 					mapWeatherWithVenue(instance.venues);
         
@@ -83,10 +84,7 @@ angular
 		}
 
 		function buildWeatherRequest (params) {
-			if (!params) { params = {}; }
-			var lat = params.hasOwnProperty('lat') ? params.lat : '37.794';
-			var lng = params.hasOwnProperty('lng') ? params.lng : '-122.408';
-			return 'http://api.openweathermap.org/data/2.5/weather?lat='+ lat + '&lon=' + lng;
+			return 'http://api.openweathermap.org/data/2.5/weather?lat='+ params.lat + '&lon=' + params.lng;
 		}
   
   })
@@ -109,11 +107,11 @@ angular
     function _buildVenueRequest (params) {
       return 'https://api.foursquare.com/v2/venues/explore?client_id=' +
                  params.id +
-                 '&client_secret=' +
-                 params.secret +
-                 '&v=20130815&' +
+                 '&client_secret='  +
+                 params.secret      +
+                 '&v=20130815&'     +
                  'll=' + params.lat + ',' + params.lng +
-                 '&query=' + params.query +
+                 '&query='  + params.query  +
                  '&offset=' + params.offset +
                  '&radius=130000' +
                  '&sortByDistance=1';
@@ -157,8 +155,8 @@ angular
     }
 
     function findBoundaries (params) {
-      var lat = parseFloat(params.lat);
-      var lng = parseFloat(params.lng);
+      var lat  = parseFloat(params.lat);
+      var lng  = parseFloat(params.lng);
       return {
         n: lat + 1.25,
         s: lat - 1.25,
@@ -170,10 +168,10 @@ angular
     function buildRequest ( params ) {
       var boundaries = service.findBoundaries(params);
       return 'http://api.geonames.org/citiesJSON?' +
-        'north=' + boundaries.n +
+        'north='  + boundaries.n +
         '&south=' + boundaries.s +
-        '&east=' + boundaries.e +
-        '&west=' + boundaries.w +
+        '&east='  + boundaries.e +
+        '&west='  + boundaries.w +
         '&lang=de&username=sturpon711';
     }
 
