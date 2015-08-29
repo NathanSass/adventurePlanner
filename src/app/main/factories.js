@@ -24,7 +24,6 @@ angular
         lat: instance.lat,
         lng: instance.lng
       };
-      console.log('boo');
       nearCityService.get(params);
     }
     
