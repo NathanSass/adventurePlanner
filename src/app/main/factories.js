@@ -143,7 +143,7 @@ angular
     
     var service = {
       get: get,
-      // findBoundaries: findBoundaries,
+      findBoundaries: findBoundaries,
       buildRequest: buildRequest
     };
     
@@ -152,23 +152,29 @@ angular
     //////////////
     
     function get ( params ) {
-      // Todo take in paramas latLng then calculate bounding box and pass it to buildRequest
-      return $http.get(buildRequest());
+      var request = buildRequest(params);
+      return $http.get(request);
     }
 
-    // function findBoundaries (params) {
+    function findBoundaries (params) {
+      var lat = parseFloat(params.lat);
+      var lng = parseFloat(params.lng);
+      return {
+        n: lat + 1.25,
+        s: lat - 1.25,
+        e: lng + 1.25,
+        w: lng - 1.25
+      };
+    }
 
-
-
-    // }
-
-    function buildRequest () {
-      var north = '38.2';
-      var south = '36.3';
-      var east = '-121';
-      var west = '-123';
-
-      return 'http://api.geonames.org/citiesJSON?north='+ north + '&south=' + south +'&east=' + east + '&west=' + west + '&lang=de&username=sturpon711';
+    function buildRequest ( params ) {
+      var boundaries = service.findBoundaries(params);
+      return 'http://api.geonames.org/citiesJSON?' +
+        'north=' + boundaries.n +
+        '&south=' + boundaries.s +
+        '&east=' + boundaries.e +
+        '&west=' + boundaries.w +
+        '&lang=de&username=sturpon711';
     }
 
   });
