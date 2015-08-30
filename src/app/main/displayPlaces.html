@@ -6,7 +6,10 @@
   <input type="text" ng-model="service.userSearchTerm" name="text" />
   <input type="submit" id="submit" value="Submit" />
 </form>
-
+Or
+<form ng-submit="service.expandSearch()" ng-controller="MainCtrl">
+  <input type="submit" id="submit" value="Expand Search" />
+</form>
 <ul>
 	
 	<li ng-repeat="venue in service.venues">

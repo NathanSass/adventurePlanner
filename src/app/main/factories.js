@@ -4,47 +4,50 @@ angular
   .module('adventureplanner.main')
   .factory('dataService', function dataService (venueService, weatherService, nearCityService) {
     var instance = {
-      citySearchRadius: 60,
       currentLocation: '',
       getVenues: getVenues,
       lat: '39.0349',
       // lng: '-122.408' //SF
       lng: '-77.1014', //DC
-      max: 20,
-      queryOtherCities: queryOtherCities,
+      offset: 20,
+      expandSearch: expandSearch,
       userSearchTerm: 'mountain',
-      venues: '',
+      venues: []
     };
 
     return instance;
 
     //////////////
 
-    function queryOtherCities () {
+    function expandSearch () {
       var params = {
-        citySearchRadius: instance.citySearchRadius,
         lat: instance.lat,
         lng: instance.lng
       };
-      nearCityService.get(params);
+      return nearCityService.get(params).then(function(nearcities){
+        nearcities.data.geonames.forEach(function(city){
+          instance.lat = city.lat;
+          instance.lng = city.lng;
+          instance.flag = 'expandSearch';
+          instance.getVenues();
+        });
+      });
     }
     
     function getVenues () {
       
       var params = {
-        lat: instance.lat, //uncomment to use custom for network calls 
+        lat: instance.lat,
         lng: instance.lng,
         query: instance.userSearchTerm,
       };
-
-      instance.queryOtherCities();
       
       return venueService.get(params)
         .then(function (response) {
-					instance.currentLocation = response.data.response.headerFullLocation;
-					instance.venues          = response.data.response.groups[0].items;
-					
-					mapWeatherWithVenue(instance.venues);
+					instance.currentLocation = response.data.response.headerFullLocation; // TODO: get this info from geolocation only
+          var newVenues   = response.data.response.groups[0].items;
+          instance.venues = instance.venues.concat(newVenues);
+          mapWeatherWithVenue(instance.venues);
         
         });
     }
@@ -53,7 +56,7 @@ angular
 			
 			var params = { lat: '', lng: '', i: 0 };
 			
-			venues.forEach( function (place) {
+			venues.forEach(function (place) {
         
         params.lat = place.venue.location.lat;
         params.lng = place.venue.location.lng;
@@ -121,7 +124,7 @@ angular
     function venueParams ( params ) {
       
       function _randNum () {
-        return Math.floor((Math.random() * params.max) + 1 );
+        return Math.floor((Math.random() * params.offset) + 1 );
       }
       return {
         id: 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O',
