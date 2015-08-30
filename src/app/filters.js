@@ -11,4 +11,19 @@ angular.module('adventureplanner')
   return function(meters) {
     return meters / 1609.344;
   };
-});
+})
+// .filter('weatherSort', function weatherSort () {
+// 	return function(venues) {
+// 		venues.sort(function(a,b){
+// 			console.log("in weatherSort")
+// 			if (a.weather.temp > b.weather.temp){
+// 				return 1;
+// 			} if (a.weather.temp < b.weather.temp) {
+// 				return -1;
+// 			} else {
+// 				return 0;
+// 			}
+
+// 		});
+// 	};
+// });
