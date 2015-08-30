@@ -12,18 +12,24 @@ angular.module('adventureplanner')
     return meters / 1609.344;
   };
 })
-// .filter('weatherSort', function weatherSort () {
-// 	return function(venues) {
-// 		venues.sort(function(a,b){
-// 			console.log("in weatherSort")
-// 			if (a.weather.temp > b.weather.temp){
-// 				return 1;
-// 			} if (a.weather.temp < b.weather.temp) {
-// 				return -1;
-// 			} else {
-// 				return 0;
-// 			}
-
-// 		});
-// 	};
-// });
+.filter('weatherSort', function weatherSort () {
+	
+	return function(venues) {
+		return venues.sort(function(a,b){
+			if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
+				if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
+				
+					if (a.weather.temp < b.weather.temp){
+						return 1;
+					}
+					if (a.weather.temp > b.weather.temp) {
+						return -1;
+					} else {
+						return 0;
+					}
+				
+				}
+			}
+		});
+	};
+});
