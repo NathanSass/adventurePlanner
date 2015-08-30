@@ -2,7 +2,7 @@
 
 angular
   .module('adventureplanner.main')
-  .factory('dataService', function dataService ( venueService, weatherService, nearCityService) {
+  .factory('dataService', function dataService (venueService, weatherService, nearCityService) {
     var instance = {
       citySearchRadius: 60,
       currentLocation: '',
@@ -32,9 +32,9 @@ angular
     function getVenues () {
       
       var params = {
-        query: instance.userSearchTerm,
         lat: instance.lat, //uncomment to use custom for network calls 
-        lng: instance.lng
+        lng: instance.lng,
+        query: instance.userSearchTerm,
       };
 
       instance.queryOtherCities();
