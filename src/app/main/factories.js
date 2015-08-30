@@ -4,15 +4,16 @@ angular
   .module('adventureplanner.main')
   .factory('dataService', function dataService ( venueService, weatherService, nearCityService) {
     var instance = {
-      getVenues: getVenues,
-      queryOtherCities: queryOtherCities,
-      venues: '',
-      currentLocation: '',
       citySearchRadius: 60,
-      userSearchTerm: 'mountain',
+      currentLocation: '',
+      getVenues: getVenues,
       lat: '39.0349',
-      lng: '-122.408'
-      // lng: '-77.1014'
+      // lng: '-122.408' //SF
+      lng: '-77.1014', //DC
+      max: 20,
+      queryOtherCities: queryOtherCities,
+      userSearchTerm: 'mountain',
+      venues: '',
     };
 
     return instance;
@@ -32,8 +33,8 @@ angular
       
       var params = {
         query: instance.userSearchTerm,
-        // lat: instance.lat, //uncomment to use custom for network calls 
-        // lng: instance.lng
+        lat: instance.lat, //uncomment to use custom for network calls 
+        lng: instance.lng
       };
 
       instance.queryOtherCities();
@@ -118,22 +119,17 @@ angular
     }
 
     function venueParams ( params ) {
-      if (!params) { params = {}; }
-      var max        = params.hasOwnProperty('max')   ? params.max   : 20;
-      var queryVenue = params.hasOwnProperty('query') ? params.query : 'mountain';
-      var lat        = params.hasOwnProperty('lat')   ? params.lat   : '37.7974';
-      var lng        = params.hasOwnProperty('lng')   ? params.lng   : '-122.4160';
       
       function _randNum () {
-        return Math.floor((Math.random() * max) + 1 );
+        return Math.floor((Math.random() * params.max) + 1 );
       }
       return {
         id: 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O',
         secret: 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM',
-        lat: lat,
-        lng: lng,
+        lat: params.lat,
+        lng: params.lng,
         offset: _randNum(20),
-        query: queryVenue
+        query: params.query
       };
     }
   })
