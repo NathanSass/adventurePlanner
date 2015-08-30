@@ -7,8 +7,9 @@ angular
       currentLocation: '',
       getVenues: getVenues,
       lat: '39.0349',
-      // lng: '-122.408' //SF
-      lng: '-77.1014', //DC
+      lng: '-122.408', //SF
+      // lng: '-77.1014', //DC
+      limit: 1,
       offset: 20,
       expandSearch: expandSearch,
       userSearchTerm: 'mountain',
@@ -21,13 +22,16 @@ angular
 
     function expandSearch () {
       var params = {
-        lat: instance.lat,
-        lng: instance.lng
+        lat:    instance.lat,
+        lng:    instance.lng,
+        offset: instance.offset,
+        query:  instance.userSearchTerm,
+        limit:  instance.limit,
       };
       return nearCityService.get(params).then(function(nearcities){
         nearcities.data.geonames.forEach(function(city){
-          instance.lat = city.lat;
-          instance.lng = city.lng;
+          instance.lat  = city.lat;
+          instance.lng  = city.lng;
           instance.flag = 'expandSearch';
           instance.getVenues();
         });
@@ -37,16 +41,18 @@ angular
     function getVenues () {
       
       var params = {
-        lat: instance.lat,
-        lng: instance.lng,
-        query: instance.userSearchTerm,
+        lat:    instance.lat,
+        lng:    instance.lng,
+        offset: instance.offset,
+        query:  instance.userSearchTerm,
+        limit:  instance.limit
       };
       
       return venueService.get(params)
         .then(function (response) {
 					instance.currentLocation = response.data.response.headerFullLocation; // TODO: get this info from geolocation only
-          var newVenues   = response.data.response.groups[0].items;
-          instance.venues = instance.venues.concat(newVenues);
+          var newVenues            = response.data.response.groups[0].items;
+          instance.venues          = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);
         
         });
@@ -54,7 +60,7 @@ angular
 
 		function mapWeatherWithVenue (venues) {
 			
-			var params = { lat: '', lng: '', i: 0 };
+			var params   = { lat: '', lng: '', i: 0 };
 			
 			venues.forEach(function (place) {
         
@@ -88,15 +94,14 @@ angular
 		}
 
 		function buildWeatherRequest (params) {
-			return 'http://api.openweathermap.org/data/2.5/weather?lat='+ params.lat + '&lon=' + params.lng;
+			return 'http://api.openweathermap.org/data/2.5/weather?lat=' + params.lat + '&lon=' + params.lng;
 		}
   
   })
   .factory('venueService', function venueService ($http) {
     
     var service = {
-      get: get,
-      venueParams: venueParams
+      get: get
     };
     
     return service;
@@ -104,36 +109,29 @@ angular
     //////////////
     
     function get(params) {
-      var venueUrl = _buildVenueRequest (venueParams(params));
-      return $http.get(venueUrl);
+      var request = buildVenueRequest (params);
+      return $http.get(request);
     }
 
-    function _buildVenueRequest (params) {
-      return 'https://api.foursquare.com/v2/venues/explore?client_id=' +
-                 params.id +
-                 '&client_secret='  +
-                 params.secret      +
-                 '&v=20130815&'     +
-                 'll=' + params.lat + ',' + params.lng +
-                 '&query='  + params.query  +
-                 '&offset=' + params.offset +
-                 '&radius=130000' +
-                 '&sortByDistance=1';
-    }
+    function buildVenueRequest (params) {
+      var id     = 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O';
+      var secret = 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM';
 
-    function venueParams ( params ) {
-      
-      function _randNum () {
-        return Math.floor((Math.random() * params.offset) + 1 );
+      function _randNum (max) {
+        return Math.floor((Math.random() * max) + 1 );
       }
-      return {
-        id: 'OICKGWOXVDITIP00YRSWBKZ2JCBE0EIU1KI3GJDMZE1LYZ3O',
-        secret: 'GJ3CMLRXSKTJH1QS5YBADM422IJG5IIJP0Y55DH2ATBDHTPM',
-        lat: params.lat,
-        lng: params.lng,
-        offset: _randNum(20),
-        query: params.query
-      };
+      
+      return 'https://api.foursquare.com/v2/venues/explore?client_id=' +
+                 id   +
+                 '&client_secret='  +
+                  secret            +
+                 '&v=20130815&'     +
+                 'll=' + params.lat + ','   + params.lng +
+                 '&query='  + params.query  +
+                 '&offset=' + _randNum(params.offset)    +
+                 '&limit='  + params.limit  +
+                 '&radius=130000'   +
+                 '&sortByDistance=1';
     }
   })
   .factory('nearCityService', function nearCityService ($http) {
