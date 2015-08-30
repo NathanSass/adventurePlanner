@@ -9,8 +9,9 @@ angular
       lat: '39.0349',
       lng: '-122.408', //SF
       // lng: '-77.1014', //DC
-      limit: 1,
+      limit:  10,
       offset: 20,
+      maxRows: 3,
       expandSearch: expandSearch,
       userSearchTerm: 'mountain',
       venues: []
@@ -22,11 +23,12 @@ angular
 
     function expandSearch () {
       var params = {
-        lat:    instance.lat,
-        lng:    instance.lng,
-        offset: instance.offset,
-        query:  instance.userSearchTerm,
-        limit:  instance.limit,
+        lat:     instance.lat,
+        lng:     instance.lng,
+        offset:  instance.offset,
+        query:   instance.userSearchTerm,
+        limit:   instance.limit,
+        maxRows: instance.maxRows
       };
       return nearCityService.get(params).then(function(nearcities){
         nearcities.data.geonames.forEach(function(city){
@@ -165,10 +167,11 @@ angular
     function buildRequest ( params ) {
       var boundaries = service.findBoundaries(params);
       return 'http://api.geonames.org/citiesJSON?' +
-        'north='  + boundaries.n +
-        '&south=' + boundaries.s +
-        '&east='  + boundaries.e +
-        '&west='  + boundaries.w +
+        'north='    + boundaries.n   +
+        '&south='   + boundaries.s   +
+        '&east='    + boundaries.e   +
+        '&west='    + boundaries.w   +
+        '&maxRows=' + params.maxRows +
         '&lang=de&username=sturpon711';
     }
 
