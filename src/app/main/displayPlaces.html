@@ -1,14 +1,14 @@
 <h2> You are in: {{service.currentLocation}} </h2>
 <p> It's {{currentTemp | kelvinToF | number:1}} F  and {{currentCondition}}</p>
 
-<form ng-submit="service.getVenues()" ng-controller="MainCtrl">
+<form ng-submit="service.newSearch()" ng-controller="MainCtrl">
   What are you in the mood for:
   <input type="text" ng-model="service.userSearchTerm" name="text" />
   <input type="submit" id="submit" value="Submit" />
 </form>
 Or
 <form ng-submit="service.expandSearch()" ng-controller="MainCtrl">
-  <input type="submit" id="submit" value="Expand Search" />
+  <input type="submit" id="submit" value="Expand Current Search" />
 </form>
 <ul>
 	

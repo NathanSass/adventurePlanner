@@ -5,14 +5,15 @@ angular
   .factory('dataService', function dataService (venueService, weatherService, nearCityService) {
     var instance = {
       currentLocation: '',
+      expandSearch: expandSearch,
       getVenues: getVenues,
       lat: '39.0349',
       lng: '-122.408', //SF
       // lng: '-77.1014', //DC
-      limit:  10,
+      limit:  5,
       offset: 20,
       maxRows: 3,
-      expandSearch: expandSearch,
+      newSearch: newSearch,
       userSearchTerm: 'mountain',
       venues: []
     };
@@ -21,6 +22,11 @@ angular
 
     //////////////
 
+    function newSearch () {
+      instance.venues = [];
+      getVenues();
+    }
+    
     function expandSearch () {
       var params = {
         lat:     instance.lat,
@@ -39,6 +45,7 @@ angular
         });
       });
     }
+
     
     function getVenues () {
       
