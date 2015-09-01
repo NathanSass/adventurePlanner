@@ -24,12 +24,12 @@ angular.module('adventureplanner', [
         getVenuesAndWeather: getVenuesAndWeather
       }
     }).
-    when('/', {
+    when('/landing', {
       templateUrl: '/adventureplanner/main/landingPage.html',
-      controller: 'landingCtrl'
+      controller: 'landingCtrl',
     }).
     otherwise({
-      redirectTo: '/home'
+      redirectTo: '/landing'
     });
 });
 

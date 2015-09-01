@@ -8,15 +8,15 @@ angular
         name: '',
         temp: '',
         condition: '',
-        lat: '39.0349',
-        lng: '-122.408'
+        lat: '',
+        lng: ''
       },
       expandSearch: expandSearch,
       init: init,
       getVenues: getVenues,
       lat: '39.0349', // initialize these as empty, might not even need them
-      lng: '-122.408', //SF
-      // lng: '-77.1014', //DC
+      // lng: '-122.408', //SF
+      lng: '-77.1014', //DC
       limit:  5,
       offset: 20,
       maxRows: 3,
@@ -35,8 +35,9 @@ angular
       };
       instance.currentData.name = 'CoolVille';
       weatherService.get(params).then(function(response){
-        instance.currentData.temp   = response.data.main.temp;
+        instance.currentData.temp      = response.data.main.temp;
         instance.currentData.condition = response.data.weather[0].main;
+        instance.currentData.name = response.data.name;
       });
       getVenues();
     }
@@ -199,4 +200,33 @@ angular
         '&lang=de&username=sturpon711';
     }
 
+  })
+  .factory('geolocator', function geolocator($location, $window, $timeout, dataService) {
+    var service = {
+      get: get,
+      success: success
+    };
+
+    return service;
+    
+    //////////////
+
+    function get () {
+      // $location.path('home')
+      if ($window.navigator.geolocation) {
+          $window.navigator.geolocation.getCurrentPosition(success);
+      }
+      else {
+        console.log("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function success (position){
+      dataService.currentData.lat = position.coords.latitude;
+      dataService.currentData.lng = position.coords.longitude;
+      
+      $timeout(function(){ 
+        $location.path('home');
+      },1);
+    }
   });
