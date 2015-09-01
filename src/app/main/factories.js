@@ -14,9 +14,8 @@ angular
       expandSearch: expandSearch,
       init: init,
       getVenues: getVenues,
-      lat: '39.0349', // initialize these as empty, might not even need them
-      // lng: '-122.408', //SF
-      lng: '-77.1014', //DC
+      lat: '',
+      lng: '',
       limit:  5,
       offset: 20,
       maxRows: 3,
@@ -39,6 +38,8 @@ angular
         instance.currentData.condition = response.data.weather[0].main;
         instance.currentData.name = response.data.name;
       });
+      instance.lat = params.lat;
+      instance.lng = params.lng;
       getVenues();
     }
 
