@@ -2,7 +2,7 @@
 
 angular
   .module('adventureplanner.main')
-  .factory('dataService', function dataService (venueService, weatherService, nearCityService) {
+  .factory('dataService', function dataService (venueService, weatherService, nearCityService, $location) {
     var instance = {
       currentData: {
         name: '',
@@ -32,7 +32,6 @@ angular
         lat: instance.currentData.lat,
         lng: instance.currentData.lng
       };
-      instance.currentData.name = 'CoolVille';
       weatherService.get(params).then(function(response){
         instance.currentData.temp      = response.data.main.temp;
         instance.currentData.condition = response.data.weather[0].main;
@@ -82,8 +81,11 @@ angular
           var newVenues            = response.data.response.groups[0].items;
           instance.venues          = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);
-        
-        });
+        })
+        .catch(function (error) {
+          alert('We need your location');
+          $location.path('landing')
+        })
     }
 
 		function mapWeatherWithVenue (venues) {
