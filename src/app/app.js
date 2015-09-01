@@ -24,6 +24,10 @@ angular.module('adventureplanner', [
         getVenuesAndWeather: getVenuesAndWeather
       }
     }).
+    when('/', {
+      templateUrl: '/adventureplanner/main/landingPage.html',
+      controller: 'landingCtrl'
+    }).
     otherwise({
       redirectTo: '/home'
     });
