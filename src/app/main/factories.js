@@ -4,10 +4,17 @@ angular
   .module('adventureplanner.main')
   .factory('dataService', function dataService (venueService, weatherService, nearCityService) {
     var instance = {
-      currentLocation: '',
+      currentData: {
+        name: '',
+        temp: '',
+        condition: '',
+        lat: '39.0349',
+        lng: '-122.408'
+      },
       expandSearch: expandSearch,
+      init: init,
       getVenues: getVenues,
-      lat: '39.0349',
+      lat: '39.0349', // initialize these as empty, might not even need them
       lng: '-122.408', //SF
       // lng: '-77.1014', //DC
       limit:  5,
@@ -21,6 +28,18 @@ angular
     return instance;
 
     //////////////
+    function init () {
+      var params = {
+        lat: instance.currentData.lat,
+        lng: instance.currentData.lng
+      };
+      instance.currentData.name = 'CoolVille';
+      weatherService.get(params).then(function(response){
+        instance.currentData.temp   = response.data.main.temp;
+        instance.currentData.condition = response.data.weather[0].main;
+      });
+      getVenues();
+    }
 
     function newSearch () {
       instance.venues = [];
@@ -40,13 +59,11 @@ angular
         nearcities.data.geonames.forEach(function(city){
           instance.lat  = city.lat;
           instance.lng  = city.lng;
-          instance.flag = 'expandSearch';
           instance.getVenues();
         });
       });
     }
 
-    
     function getVenues () {
       
       var params = {
@@ -59,7 +76,7 @@ angular
       
       return venueService.get(params)
         .then(function (response) {
-					instance.currentLocation = response.data.response.headerFullLocation; // TODO: get this info from geolocation only
+					// instance.currentLocation = response.data.response.headerFullLocation; // TODO: get this info from geolocation only
           var newVenues            = response.data.response.groups[0].items;
           instance.venues          = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);

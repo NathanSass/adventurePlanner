@@ -36,5 +36,5 @@ angular.module('adventureplanner', [
 
 getVenuesAndWeather.$inject = ['dataService'];
 function getVenuesAndWeather (dataService) {
-  return dataService.getVenues();
+  return dataService.init();
 }

@@ -1,5 +1,5 @@
-<h2> You are in: {{service.currentLocation}} </h2>
-<p> It's {{currentTemp | kelvinToF | number:1}} F  and {{currentCondition}}</p>
+<h2> You are in: {{service.currentData.name}} </h2>
+<p> It's {{service.currentData.temp | kelvinToF | number:1}} F  and {{service.currentData.condition}}</p>
 
 <form ng-submit="service.newSearch()" ng-controller="MainCtrl">
   What are you in the mood for:
