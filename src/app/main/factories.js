@@ -77,15 +77,14 @@ angular
       
       return venueService.get(params)
         .then(function (response) {
-					// instance.currentLocation = response.data.response.headerFullLocation; // TODO: get this info from geolocation only
           var newVenues            = response.data.response.groups[0].items;
           instance.venues          = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);
         })
-        .catch(function (error) {
+        .catch(function () {
           alert('We need your location');
-          $location.path('landing')
-        })
+          $location.path('landing');
+        });
     }
 
 		function mapWeatherWithVenue (venues) {
