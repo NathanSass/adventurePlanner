@@ -114,14 +114,19 @@ angular
 
     function findDistance (lat2, lng2) {
       var lat1 = instance.currentData.lat;
-      var lng1 = instance.currentData.lat;
-      // var a = lat1 - lat2;
-      // var b = lng1 -lng2;
-
-      // var c = Math.sqrt( a*a + b*b );
-
-      var dist = Math.sqrt( Math.pow((lat1-lat2), 2) + Math.pow((lng1-lng2), 2) )
-      return dist
+      var lng1 = instance.currentData.lng;
+      var rad  = function(x) {
+        return x * Math.PI / 180;
+      };
+      var R     = 6378137; // Earth’s mean radius in meter
+      var dLat  = rad(lat2 - lat1);
+      var dLong = rad(lng2 - lng1);
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(rad(lat1)) * Math.cos(rad(lat2)) *
+        Math.sin(dLong / 2) * Math.sin(dLong / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c;
+      return d; // distance in meters
     }
   })
 	.factory('weatherService', function weatherService ( $http ) {
