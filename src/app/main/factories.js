@@ -12,11 +12,12 @@ angular
         lng: ''
       },
       expandSearch: expandSearch,
-      init: init,
+      findDistance: findDistance,
       getVenues: getVenues,
+      init: init,
       lat: '',
       lng: '',
-      limit:  5,
+      limit:  10,
       offset: 20,
       maxRows: 3,
       newSearch: newSearch,
@@ -95,6 +96,8 @@ angular
         
         params.lat = place.venue.location.lat;
         params.lng = place.venue.location.lng;
+        var dist = findDistance(place.venue.location.lat, place.venue.location.lng);
+        place.distance = dist;
 
         weatherService.get(params)
 					.then(function(response) {
@@ -108,6 +111,18 @@ angular
 					});
       });
 		}
+
+    function findDistance (lat2, lng2) {
+      var lat1 = instance.currentData.lat;
+      var lng1 = instance.currentData.lat;
+      // var a = lat1 - lat2;
+      // var b = lng1 -lng2;
+
+      // var c = Math.sqrt( a*a + b*b );
+
+      var dist = Math.sqrt( Math.pow((lat1-lat2), 2) + Math.pow((lng1-lng2), 2) )
+      return dist
+    }
   })
 	.factory('weatherService', function weatherService ( $http ) {
 		var service = {
@@ -214,7 +229,6 @@ angular
     //////////////
 
     function get () {
-      // $location.path('home')
       if ($window.navigator.geolocation) {
           $window.navigator.geolocation.getCurrentPosition(success);
       }
