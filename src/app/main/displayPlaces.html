@@ -12,6 +12,7 @@ Or
 </form>
 <ul>
 	
+	<h1>Results for {{service.userSearchTerm}}</h1>
 	<!-- weatherSort may be throwing errors -->
 	<li ng-repeat="venue in service.venues | weatherSort">
 		<h2>{{venue.name}}</h2>

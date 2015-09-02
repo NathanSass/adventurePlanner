@@ -84,7 +84,6 @@ angular
           mapWeatherWithVenue(instance.venues);
         })
         .catch(function () {
-          alert('We need your location');
           $location.path('landing');
         });
     }
@@ -100,6 +99,11 @@ angular
             lng:   el.venue.location.lng
           };
         } catch(e){
+          newVenueArr[i] = {
+            name:  el.venue.name,
+            lat:   el.venue.location.lat,
+            lng:   el.venue.location.lng
+          };
           console.log("error: ", el);
         }
       });
@@ -119,12 +123,14 @@ angular
 
         weatherService.get(params)
 					.then(function(response) {
-						
-						instance.venues[params.i].weather = {
-							temp: response.data.main.temp,
-							condition: response.data.weather[0].main
-						};
-						
+            try {
+              instance.venues[params.i].weather = {
+                temp: response.data.main.temp,
+                condition: response.data.weather[0].main
+              };
+            } catch(e) {
+              console.log("Error: ", instance.venues, 'index: ', i);
+            }
 						params.i += 1;
 					});
       });

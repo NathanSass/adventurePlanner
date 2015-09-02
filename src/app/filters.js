@@ -16,6 +16,7 @@ angular.module('adventureplanner')
 	
 	return function(venues) {
 		return venues.sort(function(a,b){
+			// I wonder if this is more or less performant than a try/catch
 			if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
 				if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
 				
