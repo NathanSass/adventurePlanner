@@ -92,12 +92,16 @@ angular
     function parseVenueData (data){
       var newVenueArr = [];
       data.forEach(function(el, i){
-        newVenueArr[i] = {
-          name: data[i].venue.name,
-          blurb: data[i].tips[0].text,
-          lat: data[i].venue.location.lat,
-          lng: data[i].venue.location.lng
-        };
+        try {
+          newVenueArr[i] = {
+            name:  el.venue.name,
+            blurb: el.tips[0].text,
+            lat:   el.venue.location.lat,
+            lng:   el.venue.location.lng
+          };
+        } catch(e){
+          console.log("error: ", el);
+        }
       });
       return newVenueArr;
     }
