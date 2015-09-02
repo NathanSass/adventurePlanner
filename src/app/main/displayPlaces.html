@@ -12,11 +12,11 @@ Or
 </form>
 <ul>
 	
+	<!-- weatherSort may be throwing errors -->
 	<li ng-repeat="venue in service.venues | weatherSort">
-		<h2>{{venue.venue.name}}</h2>
-		<!-- Distance no longer accurate when using expand search -->
-		<p> {{venue.weather.temp | kelvinToF | number:1}} F {{venue.weather.condition}} and {{venue.distance | metersToMiles | number:3}} miles~~~~~~~~~~~~~{{venue.venue.location.distance | metersToMiles | number:1}} miles</p>
-		<p>{{venue.tips[0].text}}</p>
+		<h2>{{venue.name}}</h2>
+		<p> {{venue.weather.temp | kelvinToF | number:1}} F {{venue.weather.condition}} and {{venue.distance | metersToMiles | number:1}} miles</p>
+		<p>{{venue.blurb}}</p>
 	</li>
 
 </ul>

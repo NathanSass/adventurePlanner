@@ -18,9 +18,10 @@ angular
       lat: '',
       lng: '',
       limit:  10,
-      offset: 20,
       maxRows: 3,
       newSearch: newSearch,
+      offset: 20,
+      parseVenueData: parseVenueData,
       userSearchTerm: 'mountain',
       venues: []
     };
@@ -78,7 +79,7 @@ angular
       
       return venueService.get(params)
         .then(function (response) {
-          var newVenues            = response.data.response.groups[0].items;
+          var newVenues        = parseVenueData(response.data.response.groups[0].items);
           instance.venues          = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);
         })
@@ -88,15 +89,28 @@ angular
         });
     }
 
+    function parseVenueData (data){
+      var newVenueArr = [];
+      data.forEach(function(el, i){
+        newVenueArr[i] = {
+          name: data[i].venue.name,
+          blurb: data[i].tips[0].text,
+          lat: data[i].venue.location.lat,
+          lng: data[i].venue.location.lng
+        };
+      });
+      return newVenueArr;
+    }
+
 		function mapWeatherWithVenue (venues) {
 			
 			var params   = { lat: '', lng: '', i: 0 };
 			
 			venues.forEach(function (place) {
         
-        params.lat = place.venue.location.lat;
-        params.lng = place.venue.location.lng;
-        var dist = findDistance(place.venue.location.lat, place.venue.location.lng);
+        params.lat = place.lat;
+        params.lng = place.lng;
+        var dist = findDistance(place.lat, place.lng);
         place.distance = dist;
 
         weatherService.get(params)
