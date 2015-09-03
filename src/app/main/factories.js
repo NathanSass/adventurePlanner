@@ -79,13 +79,18 @@ angular
       
       return venueService.get(params)
         .then(function (response) {
-          var newVenues        = parseVenueData(response.data.response.groups[0].items);
-          instance.venues          = instance.venues.concat(newVenues);
+          var newVenues   = parseVenueData(response.data.response.groups[0].items);
+          instance.venues = instance.venues.concat(newVenues);
           mapWeatherWithVenue(instance.venues);
         })
         .catch(function () {
           $location.path('landing');
-        });
+        })
+        .then(function(){
+          // Write function here that releases the data object;
+          console.log("RELEASE DATA OBJECT REFERENCE");
+        })
+
     }
 
     function parseVenueData (data){
