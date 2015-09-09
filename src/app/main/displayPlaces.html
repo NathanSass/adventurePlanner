@@ -13,11 +13,11 @@ Or
 <ul>
 	
 	<h1>Results for {{service.userSearchTerm}}</h1>
-	<!-- weatherSort may be throwing errors -->
-	<li ng-repeat="venue in service.venues | weatherSort">
+	
+	<!--| weatherSort throwing errors -->
+	<li ng-repeat="venue in service.appData">
 		<h2>{{venue.name}}</h2>
 		<p> {{venue.weather.temp | kelvinToF | number:1}} F {{venue.weather.condition}} and {{venue.distance | metersToMiles | number:1}} miles</p>
 		<p>{{venue.blurb}}</p>
 	</li>
-
 </ul>

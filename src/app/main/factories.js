@@ -23,12 +23,20 @@ angular
       offset: 20,
       parseVenueData: parseVenueData,
       userSearchTerm: 'mountain',
-      venues: []
+      venues: [],
+      // set venues(value) {
+      //   this._venues = this._venues.concat(value);
+      // },
+      // get venues() {
+      //   return this._venues;
+      // },
+      appData: []
     };
 
     return instance;
-
+  
     //////////////
+  
     function init () {
       var params = {
         lat: instance.currentData.lat,
@@ -87,8 +95,9 @@ angular
           $location.path('landing');
         })
         .then(function(){
-          // Write function here that releases the data object;
-          console.log("RELEASE DATA OBJECT REFERENCE");
+          instance.appData = instance.venues;
+          console.log("RELEASE DATA OBJECT REFERENCE"); //having double error sometimes
+          return instance.appData;
         })
 
     }
