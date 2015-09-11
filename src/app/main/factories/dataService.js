@@ -22,6 +22,7 @@ angular
       newSearch: newSearch,
       offset: 20,
       parseVenueData: parseVenueData,
+      sortByTemp: sortByTemp,
       userSearchTerm: 'mountain',
       venues: [],
       // set venues(value) {
@@ -89,19 +90,40 @@ angular
         .then(function (response) {
           var newVenues   = parseVenueData(response.data.response.groups[0].items);
           instance.venues = instance.venues.concat(newVenues);
-          mapWeatherWithVenue(instance.venues);
+          return mapWeatherWithVenue(instance.venues); //what is convention with returns in .then()
         })
         .catch(function () {
           $location.path('landing');
         })
         .then(function(){
-        	 // Sort function here to get warmest weather first
+					// Sort function here to get warmest weather first
+					// instance.venues = sortByTemp(instance.venues)
           instance.appData = instance.venues;
           console.log("RELEASE DATA OBJECT REFERENCE"); //having double error sometimes
           return instance.appData;
-        })
+        });
 
     }
+
+   //  function sortByTemp (venues) {
+			// venues.sort(function(a,b){
+			// 	// I wonder if this is more or less performant than a try/catch
+			// 	if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
+			// 		if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
+
+			// 			if (a.weather.temp < b.weather.temp){
+			// 				return 1;
+			// 			}
+			// 			if (a.weather.temp > b.weather.temp) {
+			// 				return -1;
+			// 			} else {
+			// 				return 0;
+			// 			}
+
+			// 		}
+			// 	}
+			// });
+   //  };
 
     function parseVenueData (data){
       var newVenueArr = [];
@@ -139,9 +161,9 @@ angular
         weatherService.get(params)
 					.then(function(response) {
             try {
-              instance.venues[params.i].weather = {
-                temp: response.data.main.temp,
-                condition: response.data.weather[0].main
+              return instance.venues[params.i].weather = {
+				                temp: response.data.main.temp,
+				                condition: response.data.weather[0].main
               };
             } catch(e) {
               console.log("Error: ", instance.venues, 'index: ', i);
