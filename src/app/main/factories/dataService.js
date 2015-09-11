@@ -95,6 +95,7 @@ angular
           $location.path('landing');
         })
         .then(function(){
+        	 // Sort function here to get warmest weather first
           instance.appData = instance.venues;
           console.log("RELEASE DATA OBJECT REFERENCE"); //having double error sometimes
           return instance.appData;
