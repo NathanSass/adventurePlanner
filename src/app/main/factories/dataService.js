@@ -4,7 +4,7 @@ angular
   .module('adventureplanner.main')
   .factory('dataService', function dataService (venueService, weatherService, nearCityService, $location) {
     var instance = {
-      currentData: {
+			currentData: {
         name: '',
         temp: '',
         condition: '',
@@ -90,7 +90,7 @@ angular
         .then(function (response) {
           var newVenues   = parseVenueData(response.data.response.groups[0].items);
           instance.venues = instance.venues.concat(newVenues);
-          return mapWeatherWithVenue(instance.venues); //what is convention with returns in .then()
+          return mapVenueWithWeatherAndDist(instance.venues); //what is convention with returns in .then()
         })
         .catch(function () {
           $location.path('landing');
@@ -99,31 +99,31 @@ angular
 					// Sort function here to get warmest weather first
 					// instance.venues = sortByTemp(instance.venues)
           instance.appData = instance.venues;
-          console.log("RELEASE DATA OBJECT REFERENCE"); //having double error sometimes
+          console.log('RELEASE DATA OBJECT REFERENCE'); //having double release sometimes
           return instance.appData;
         });
 
     }
 
-   //  function sortByTemp (venues) {
-			// venues.sort(function(a,b){
-			// 	// I wonder if this is more or less performant than a try/catch
-			// 	if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
-			// 		if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
+    function sortByTemp (venues) { // currently not used
+			venues.sort(function(a,b){
+				// I wonder if this is more or less performant than a try/catch
+				if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
+					if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
 
-			// 			if (a.weather.temp < b.weather.temp){
-			// 				return 1;
-			// 			}
-			// 			if (a.weather.temp > b.weather.temp) {
-			// 				return -1;
-			// 			} else {
-			// 				return 0;
-			// 			}
+						if (a.weather.temp < b.weather.temp){
+							return 1;
+						}
+						if (a.weather.temp > b.weather.temp) {
+							return -1;
+						} else {
+							return 0;
+						}
 
-			// 		}
-			// 	}
-			// });
-   //  };
+					}
+				}
+			});
+    };
 
     function parseVenueData (data){
       var newVenueArr = [];
@@ -141,32 +141,34 @@ angular
             lat:   el.venue.location.lat,
             lng:   el.venue.location.lng
           };
-          console.log("error: ", el);
+          console.log('error: ', el);
         }
       });
       return newVenueArr;
     }
 
-		function mapWeatherWithVenue (venues) {
+		function mapVenueWithWeatherAndDist (venues) {
 			
-			var params   = { lat: '', lng: '', i: 0 };
-			
-			venues.forEach(function (place) {
+			venues.forEach(function (place, index) {
+				var params   = {
+					lat: place.lat,
+					lng: place.lng,
+					i: index
+				};
         
-        params.lat = place.lat;
-        params.lng = place.lng;
-        var dist = findDistance(place.lat, place.lng);
-        place.distance = dist;
+        var dist = findDistance(place.lat, place.lng); // Not exactly part of this function but works here
+        place.distance = dist; // not sure why this is here
 
         weatherService.get(params)
 					.then(function(response) {
-            try {
-              return instance.venues[params.i].weather = {
-				                temp: response.data.main.temp,
-				                condition: response.data.weather[0].main
-              };
+						try {
+							var index = response.config.params.i;
+							instance.venues[index].weather = {
+								temp: response.data.main.temp,
+							  condition: response.data.weather[0].main
+							};
             } catch(e) {
-              console.log("Error: ", instance.venues, 'index: ', i);
+							console.log('Error: ', instance.venues);
             }
 						params.i += 1;
 					});

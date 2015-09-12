@@ -12,7 +12,15 @@ angular
 		//////////////
 
 		function get(params) {
-			return $http.get(buildWeatherRequest(params));
+			if (!params.hasOwnProperty('i')) { // not needed for init function
+				params.i = undefined;
+			}
+			var request = buildWeatherRequest(params);
+			return $http({
+				url: request, 
+				method: "GET",
+				params: { i: params.i }
+			});
 		}
 
 		function buildWeatherRequest (params) {
