@@ -96,6 +96,7 @@ angular
           $location.path('landing');
         })
         .then(function(){
+        	// refactor this to use a .when type statement
 					// Sort function here to get warmest weather first
 					// instance.venues = sortByTemp(instance.venues)
           instance.appData = instance.venues;
@@ -170,7 +171,6 @@ angular
             } catch(e) {
 							console.log('Error: ', instance.venues);
             }
-						params.i += 1;
 					});
       });
 		}
