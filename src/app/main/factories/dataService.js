@@ -96,18 +96,18 @@ angular
           $location.path('landing');
         })
         .then(function(){
-        	// refactor this to use a .when type statement
-					// Sort function here to get warmest weather first
-					// instance.venues = sortByTemp(instance.venues)
-          instance.appData = instance.venues;
-          console.log('RELEASE DATA OBJECT REFERENCE'); //having double release sometimes
-          return instance.appData;
+            if (instance.venues.length > 1) {
+              instance.venues  = sortByTemp(instance.venues);
+            }
+            instance.appData = instance.venues;
+            console.log('RELEASE DATA OBJECT REFERENCE'); //having double release sometimes
+            return instance.appData;
         });
 
     }
 
     function sortByTemp (venues) { // currently not used
-			venues.sort(function(a,b){
+			return venues.sort(function(a,b){
 				// I wonder if this is more or less performant than a try/catch
 				if (a.hasOwnProperty('weather') && b.hasOwnProperty('weather')) {
 					if (a.weather.hasOwnProperty('temp') && b.weather.hasOwnProperty('temp')) {
@@ -160,8 +160,8 @@ angular
           i: index
         };
 
-        var promise = weatherService.get(params)
-          .then(function(response) {
+        var promise = weatherService.get(params).then(
+          function(response) {
             try {
               var index = response.config.params.i;
               instance.venues[index].weather = {

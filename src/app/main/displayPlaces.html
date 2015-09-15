@@ -14,7 +14,6 @@ Or
 	
 	<h1>Results for {{service.userSearchTerm}}</h1>
 	
-	<!--| weatherSort throwing errors -->
 	<li ng-repeat="venue in service.appData">
 		<h2>{{venue.name}}</h2>
 		<p> {{venue.weather.temp | kelvinToF | number:1}} F {{venue.weather.condition}} and {{venue.distance | metersToMiles | number:1}} miles</p>

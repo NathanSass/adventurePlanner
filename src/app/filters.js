@@ -12,7 +12,7 @@ angular.module('adventureplanner')
     return meters / 1609.344;
   };
 })
-.filter('weatherSort', function weatherSort () {
+.filter('weatherSort', function weatherSort () { // Not used, was throwing errors
 	
 	return function(venues) {
 		return venues.sort(function(a,b){
