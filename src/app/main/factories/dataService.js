@@ -160,6 +160,9 @@ angular
           i: index
         };
 
+        var dist = findDistance(place.lat, place.lng); // Not exactly part of this function but works here
+        place.distance = dist;
+
         var promise = weatherService.get(params).then(
           function(response) {
             try {
