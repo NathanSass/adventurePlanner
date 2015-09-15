@@ -2,7 +2,7 @@
 
 angular
   .module('adventureplanner.main')
-  .factory('dataService', function dataService (venueService, weatherService, nearCityService, $location) {
+  .factory('dataService', function dataService (venueService, weatherService, nearCityService, $location, $q) {
     var instance = {
 			currentData: {
         name: '',
@@ -149,30 +149,35 @@ angular
     }
 
 		function mapVenueWithWeatherAndDist (venues) {
-			
-			venues.forEach(function (place, index) {
-				var params   = {
-					lat: place.lat,
-					lng: place.lng,
-					i: index
-				};
-        
-        var dist = findDistance(place.lat, place.lng); // Not exactly part of this function but works here
-        place.distance = dist; // not sure why this is here
 
-        weatherService.get(params)
-					.then(function(response) {
-						try {
-							var index = response.config.params.i;
-							instance.venues[index].weather = {
-								temp: response.data.main.temp,
-							  condition: response.data.weather[0].main
-							};
+      var promises = [];
+
+      venues.forEach(function (place, index) {
+
+        var params   = {
+          lat: place.lat,
+          lng: place.lng,
+          i: index
+        };
+
+        var promise = weatherService.get(params)
+          .then(function(response) {
+            try {
+              var index = response.config.params.i;
+              instance.venues[index].weather = {
+                temp: response.data.main.temp,
+                condition: response.data.weather[0].main
+              };
             } catch(e) {
-							console.log('Error: ', instance.venues);
+              console.log('Error: ', instance.venues);
             }
-					});
+          });
+
+        promises.push(promise);
+
       });
+
+      return $q.all(promises);
 		}
 
     function findDistance (lat2, lng2) {
