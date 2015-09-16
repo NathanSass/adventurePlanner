@@ -1,6 +1,8 @@
 adventurePlanner
 ============
 
+## Check it out [here](http://nathansass.github.io/adventurePlanner/#/landing)
+
 ## Development
 
 To start developing in the project run:
