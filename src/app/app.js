@@ -33,7 +33,6 @@ angular.module('adventureplanner', [
     });
 });
 
-
 getVenuesAndWeather.$inject = ['dataService'];
 function getVenuesAndWeather (dataService) {
   return dataService.init();
