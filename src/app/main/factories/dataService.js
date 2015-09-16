@@ -100,7 +100,6 @@ angular
               instance.venues  = sortByTemp(instance.venues);
             }
             instance.appData = instance.venues;
-            console.log('RELEASE DATA OBJECT REFERENCE'); //having double release sometimes
             return instance.appData;
         });
 
