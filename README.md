@@ -1,7 +1,7 @@
 adventurePlanner
 ============
 
-I am seeking new spots around me to explore. I want to do my exploring in the best possible weather. This project helps me (and hopefully you) find these cool new spots. I have found it is great for hikes, beaches and dog parks. Check it out [here](http://nathansass.github.io/adventurePlanner/#/landing)
+I am seeking new spots around me to explore. I want to do my exploring in the best possible weather. This project helps me (and hopefully you) find these cool new spots. I have found it is great for hikes, beaches and dog parks. Check it out [here!](http://nathansass.github.io/adventurePlanner/#/landing)
 
 
 ## Development
