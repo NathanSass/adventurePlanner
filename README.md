@@ -3,36 +3,14 @@ adventurePlanner
 
 ## Check it out [here](http://nathansass.github.io/adventurePlanner/#/landing)
 
+I am seeking new spots around me to explore. I want to do my exploring in the best possible weather. This project helps me (and hopefully you) find these cool new spots. I have found it is great for hikes, beaches and dog parks.  
+
 ## Development
 
 To start developing in the project run:
 
 ```bash
 gulp serve
-```
-
-Then head to `http://localhost:3000` in your browser.
-
-The `serve` tasks starts a static file server, which serves the AngularJS application, and a watch task which watches all files for changes and lints, builds and injects them into the index.html accordingly.
-
-## Tests
-
-To run tests run:
-
-```bash
-gulp test
-```
-
-**Or** first inject all test files into `karma.conf.js` with:
-
-```bash
-gulp karma-conf
-```
-
-Then you're able to run Karma directly. Example:
-
-```bash
-karma start --single-run
 ```
 
 ## Production ready build - a.k.a. dist
