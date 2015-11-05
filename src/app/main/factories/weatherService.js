@@ -17,14 +17,14 @@ angular
 			}
 			var request = buildWeatherRequest(params);
 			return $http({
-				url: request, 
-				method: "GET",
+				url: request,
+				method: 'GET',
 				params: { i: params.i }
 			});
 		}
 
 		function buildWeatherRequest (params) {
-			return 'http://api.openweathermap.org/data/2.5/weather?lat=' + params.lat + '&lon=' + params.lng;
+			return 'http://api.openweathermap.org/data/2.5/weather?lat=' + params.lat + '&lon=' + params.lng + '&APPID=4233057dd5ff3c197d4ae39ae8b05582';
 		}
   
   });
